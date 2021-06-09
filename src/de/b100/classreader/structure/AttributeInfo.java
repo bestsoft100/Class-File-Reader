@@ -1,6 +1,7 @@
 package de.b100.classreader.structure;
 
 import de.b100.classreader.Reader;
+import de.b100.classreader.Writer;
 
 public class AttributeInfo {
 	
@@ -10,7 +11,7 @@ public class AttributeInfo {
 	
 	public AttributeInfo(Reader reader) {
 		attribute_name_index = reader.read2();
-		attribute_length = reader.read4();
+		attribute_length = reader.read4L();
 		info = reader.readArray1B((int)attribute_length);
 	}
 	
@@ -22,6 +23,12 @@ public class AttributeInfo {
 		}
 		
 		return info;
+	}
+
+	public void save(Writer writer) {
+		writer.write2(attribute_name_index);
+		writer.write4L(attribute_length);
+		for(int i : info) writer.write1(i);
 	}
 	
 }

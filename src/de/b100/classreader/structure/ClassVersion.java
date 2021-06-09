@@ -1,6 +1,7 @@
 package de.b100.classreader.structure;
 
 import de.b100.classreader.Reader;
+import de.b100.classreader.Writer;
 
 public class ClassVersion {
 	
@@ -14,6 +15,11 @@ public class ClassVersion {
 	
 	public String toString() {
 		return major + "." + minor;
+	}
+
+	public void write(Writer writer) {
+		writer.write2(minor);
+		writer.write2(major);
 	}
 	
 }

@@ -17,19 +17,26 @@ public class Reader {
 		return data[i++];
 	}
 	
+	public long read1L() {
+		return data[i++];
+	}
+	
 	public int read2() {
 		return read1() * 256 + read1();
 	}
 
-	public int read4() {
-		int value = 0;
+	public long read4L() {
+		long v0 = read1();
+		long v1 = read1();
+		long v2 = read1();
+		long v3 = read1();
 		
-		value += read1() << 24;
-		value += read1() << 16;
-		value += read1() << 8;
-		value += read1();
+		v0 = v0 << 24;
+		v1 = v1 << 16;
+		v2 = v2 << 8;
+		v3 = v3 << 0;
 		
-		return value;
+		return v0 + v1 + v2 + v3;
 	}
 	
 	public int available() {
@@ -44,7 +51,7 @@ public class Reader {
 		Bytes bytes = new Bytes(count);
 		
 		for(int i=0; i<count; i++) {
-			bytes.set(i, readByte());
+			bytes.set(i, new SingleByte(read1()));
 		}
 		
 		return bytes;
@@ -68,6 +75,10 @@ public class Reader {
 		}
 		
 		return bytes;
+	}
+	
+	public int getPosition() {
+		return i;
 	}
 	
 }

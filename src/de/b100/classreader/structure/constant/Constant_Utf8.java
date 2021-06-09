@@ -1,6 +1,7 @@
 package de.b100.classreader.structure.constant;
 
 import de.b100.classreader.Reader;
+import de.b100.classreader.Writer;
 import de.b100.classreader.structure.Bytes;
 import de.b100.classreader.structure.ConstantInfo;
 import de.b100.classreader.structure.SingleByte;
@@ -13,6 +14,11 @@ public class Constant_Utf8 extends ConstantInfo{
 	public void create(Reader reader) {
 		length = reader.read2();
 		bytes = reader.readBytes(length); //TODO Check if allowed
+	}
+
+	public void save(Writer writer) {
+		writer.write2(length);
+		writer.writeBytes(bytes);
 	}
 	
 	public String toString() {

@@ -1,6 +1,7 @@
 package de.b100.classreader.structure;
 
 import de.b100.classreader.Reader;
+import de.b100.classreader.Writer;
 
 public class FieldInfo {
 	
@@ -24,6 +25,15 @@ public class FieldInfo {
 		}
 		
 		return info;
+	}
+
+	public void save(Writer writer) {
+		writer.write2(accessFlags);
+		writer.write2(name_index);
+		writer.write2(descriptorIndex);
+		
+		writer.write2(attributes.length);
+		for(AttributeInfo info : attributes) info.save(writer);
 	}
 	
 }

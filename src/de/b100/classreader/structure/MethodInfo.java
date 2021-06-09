@@ -1,6 +1,7 @@
 package de.b100.classreader.structure;
 
 import de.b100.classreader.Reader;
+import de.b100.classreader.Writer;
 
 public class MethodInfo {
 	
@@ -28,6 +29,15 @@ public class MethodInfo {
 		}
 		
 		return info;
+	}
+
+	public void save(Writer writer) {
+		writer.write2(access_flags);
+		writer.write2(nameindex);
+		writer.write2(descriptorIndex);
+		
+		writer.write2(attributes.length);
+		for(AttributeInfo info : attributes) info.save(writer);
 	}
 	
 }

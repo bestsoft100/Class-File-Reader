@@ -2,8 +2,11 @@ package de.b100.classreader.structure;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import de.b100.classreader.Reader;
+import de.b100.classreader.Writer;
 import de.b100.classreader.structure.constant.Constant_Class;
 import de.b100.classreader.structure.constant.Constant_Double;
 import de.b100.classreader.structure.constant.Constant_Fieldref;
@@ -22,6 +25,8 @@ import de.b100.classreader.structure.constant.Constant_Utf8;
 public abstract class ConstantInfo {
 	
 	public abstract void create(Reader reader);
+	
+	public abstract void save(Writer writer);
 	
 	public static ConstantInfo[] getArray(Reader reader) {
 		ConstantInfo[] constants = new ConstantInfo[reader.read2() - 1];
@@ -54,6 +59,34 @@ public abstract class ConstantInfo {
 			
 			throw new RuntimeException("Tag: "+tag+" Type: "+typeString, e);
 		}
+	}
+	
+	public static void save(ConstantInfo[] constantPool, Writer writer) {
+		writer.write2(constantPool.length + 1);
+		
+		for(int i=0; i < constantPool.length; i++) {
+			int tag = getTag(constantPool[i]);
+			
+			writer.write1(tag);
+			
+			constantPool[i].save(writer);
+		}
+	}
+	
+	public static int getTag(ConstantInfo constant) {
+		Set<Entry<Integer, Class<? extends ConstantInfo>>> entrySet = types.entrySet();
+		
+		Class<? extends ConstantInfo> class1 = constant.getClass();
+		
+		for(Entry<Integer, Class<? extends ConstantInfo>> entry : entrySet) {
+			Class<? extends ConstantInfo> class2 = entry.getValue();
+			
+			if(class1 == class2) {
+				return entry.getKey();
+			}
+		}
+		
+		throw new RuntimeException();
 	}
 	
 	public static Map<Integer, Class<? extends ConstantInfo>> types;
